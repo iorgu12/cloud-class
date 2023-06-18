@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-AUTH_TOKEN = "your_hardcoded_token"
+AUTH_TOKEN = "token"
 
 data = {
     "favouriteCoffee": "espresso",
