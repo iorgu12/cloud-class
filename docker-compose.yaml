@@ -1,35 +1,33 @@
 version: '3'
+
 services:
-  web:
+  web1:
     build: .
-    command: flask run --host=0.0.0.0
     volumes:
       - .:/app
+      - ./data/db:/var/lib/postgresql/data
     environment:
-      - DATABASE_URL=mysql://coco:loco@db/coco12
-    depends_on:
-      - db
-    networks:
-      - app-network
-  db:
-    image: mysql:5.7
+      - FLASK_RUN_HOST=0.0.0.0
+
+  web2:
+    build: .
     volumes:
-      - ./data:/var/lib/mysql
+      - .:/app
+      - ./data/db:/var/lib/postgresql/data
     environment:
-      - MYSQL_ROOT_PASSWORD=coco
-      - MYSQL_DATABASE=loco
-    networks:
-      - app-network
-  nginx:
+      - FLASK_RUN_HOST=0.0.0.0
+
+  web3:
+    build: .
+    volumes:
+      - .:/app
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - FLASK_RUN_HOST=0.0.0.0
+
+  loadbalancer:
     image: nginx:latest
     ports:
-      - "80:80"
+      - 80:80
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - web
-    networks:
-      - app-network
-networks:
-  app-network:
-    driver: bridge
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
